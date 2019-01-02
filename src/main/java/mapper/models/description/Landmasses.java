@@ -4,6 +4,7 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.batik.ext.awt.g2d.GraphicContext;
 import org.apache.batik.svggen.DOMGroupManager;
@@ -14,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 import mapper.Mapper;
 import mapper.models.description.Landmass.Type;
+import mapper.models.math.FractalLines;
 import mapper.models.math.LatLong;
 import mapper.models.math.Mercator;
 import mapper.models.math.Point;
@@ -30,8 +32,11 @@ public class Landmasses {
 		Element container = g.getDOMFactory().createElementNS(Mapper.SVG, "g");
         container.setAttribute("style", "mix-blend-mode:hard-light;opacity:0.2;");
 		group.addElement(container, DOMGroupManager.FILL);
+		Random r = new Random();
 		
 		for(Landmass lm : landmasses) {
+			lm.setPoints(FractalLines.interpolate(r, lm.getPoints()));
+			
 			if(lm.getType() == Type.ICE) {
 				StringBuilder path = new StringBuilder();
 				Iterator<LatLong> it = lm.getPoints().iterator();
