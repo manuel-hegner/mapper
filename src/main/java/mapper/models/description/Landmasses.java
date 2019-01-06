@@ -34,7 +34,7 @@ public class Landmasses {
 		Random master = new Random(17);
 		for(Landmass lm : landmasses) {
 			Random r = new Random(master.nextLong());
-			lm.setPoints(FractalLines.interpolate(r, lm.getPoints(), true, width));
+			lm.setPoints(FractalLines.interpolate(lm.getType(), r, lm.getPoints(), true, width));
 		}
 		return this;
 	}

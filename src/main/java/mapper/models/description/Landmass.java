@@ -14,10 +14,11 @@ import mapper.models.math.LatLong;
 public class Landmass {
 	@Getter @RequiredArgsConstructor
 	public static enum Type {
-		LAND("black"),
-		ICE("white");
+		LAND("black", 0.8),
+		ICE("white", 0.5);
 		
 		private final String cSSColor;
+		private final double fractalStrength;
 	};
 	
 	@ToString.Include
