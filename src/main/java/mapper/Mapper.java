@@ -25,7 +25,8 @@ public class Mapper {
 	public static final String SVG = "http://www.w3.org/2000/svg";
 	
 	public static void main(String... args) throws Exception {
-		new Mapper().create(800);
+		new Mapper().create(500);
+		new Mapper().create(2000);
 		//new Mapper().create(10_000);
 	}
 	
@@ -56,6 +57,7 @@ public class Mapper {
 		System.out.println("\tdraw landmasses");
 		Jackson.MAPPER
 			.readValue(new File("coordinates.json"), Landmasses.class)
+			.interpolate(width)
 			.render(g, width, height);
 		
 		//store svg

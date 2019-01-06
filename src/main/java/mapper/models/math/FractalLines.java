@@ -7,8 +7,11 @@ import java.util.Random;
 
 public class FractalLines {
 
-	public static List<LatLong> interpolate(Random r, List<LatLong> points) {
+	public static List<LatLong> interpolate(Random r, List<LatLong> points, boolean closed, int width) {
 		ArrayDeque<LatLong> open = new ArrayDeque<>(points);
+		//for interpolation between first and last point
+		if(closed)
+			open.add(open.getFirst());
 		List<LatLong> result = new ArrayList<>();
 		result.add(open.pop());
 		LatLong a = result.get(0);
@@ -17,12 +20,8 @@ public class FractalLines {
 			LatLong b = open.getFirst();
 			
 			double distance = a.distanceTo(b);
-			if(distance > 1500) {
-				double d = r.nextDouble()-0.5;
-				LatLong c = new LatLong(
-					(a.getLatitude()+b.getLatitude())/2		+ (a.getLongitude()-b.getLongitude())*d, 
-					(a.getLongitude()+b.getLongitude())/2	+ (a.getLatitude()-b.getLatitude())*d
-				);
+			if(distance > 10_000) {
+				LatLong c = fractal(r, a, b, width);
 				open.push(c);
 			}
 			else {
@@ -30,7 +29,22 @@ public class FractalLines {
 				result.add(open.pop());
 			}
 		}
+		//if closed remove the last point again
+		if(closed)
+			result.remove(result.size()-1);
 		return result;
+	}
+
+	private static LatLong fractal(Random r, LatLong a, LatLong b, int width) {
+		double d = r.nextDouble()-0.5;
+		double aY = Mercator.latitudeToPixelY(a.getLatitude(), width);
+		double aX = Mercator.longitudeToPixelX(a.getLongitude(), width);
+		double bY = Mercator.latitudeToPixelY(b.getLatitude(), width);
+		double bX = Mercator.longitudeToPixelX(b.getLongitude(), width);
+		return new LatLong(
+			Mercator.pixelYToLatitude(Cap.cap((aY+bY)/2 - (aX-bX)*d, width), width), 
+			Mercator.pixelXToLongitude(Cap.cap((aX+bX)/2 + (aY-bY)*d, width), width)
+		);
 	}
 
 }
