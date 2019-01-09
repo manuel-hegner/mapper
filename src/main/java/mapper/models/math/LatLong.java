@@ -1,5 +1,7 @@
 package mapper.models.math;
 
+import java.util.Random;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -16,6 +18,7 @@ import lombok.ToString;
 @ToString
 public class LatLong {
 
+	private final static int R = 6371; // Radius of the earth
 	private double latitude;
 	private double longitude;
 
@@ -37,7 +40,7 @@ public class LatLong {
 	}
 	
 	public static double distance(double lat1, double lat2, double lon1, double lon2) {
-		final int R = 6371; // Radius of the earth
+		
 
 		double latDistance = Math.toRadians(lat2 - lat1);
 		double lonDistance = Math.toRadians(lon2 - lon1);
@@ -46,12 +49,12 @@ public class LatLong {
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		double distance = R * c * 1000; // convert to meters
 		return distance;
-		
-		/* if you want a height difference
-		double height = el1 - el2;
+	}
 
-		distance = Math.pow(distance, 2) + Math.pow(height, 2);
-
-		return Math.sqrt(distance);*/
+	public static long generateRandomSeed(LatLong a, LatLong b) {
+		return Double.doubleToLongBits(a.latitude)
+			+ Double.doubleToLongBits(a.longitude)
+			+ Double.doubleToLongBits(b.latitude)
+			+ Double.doubleToLongBits(b.longitude);
 	}
 }

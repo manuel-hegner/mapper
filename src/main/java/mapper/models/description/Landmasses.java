@@ -31,10 +31,9 @@ public class Landmasses {
 
 	
 	public Landmasses interpolate(int width) {
-		Random master = new Random(17);
 		for(Landmass lm : landmasses) {
-			Random r = new Random(master.nextLong());
-			lm.setPoints(FractalLines.interpolate(lm.getType(), r, lm.getPoints(), true, width));
+			System.out.println("\t\tinterpolate");
+			lm.setPoints(FractalLines.interpolate(lm.getType(), lm.getPoints(), true, width));
 		}
 		return this;
 	}
@@ -49,6 +48,7 @@ public class Landmasses {
 		
 		for(Landmass lm : landmasses) {
 			if(lm.getType() == Type.ICE) {
+				System.out.println("\t\tdrawing ice");
 				StringBuilder path = new StringBuilder();
 				Iterator<LatLong> it = lm.getPoints().iterator();
 				Point start = Mercator.getPixel(it.next(), width);
@@ -73,6 +73,7 @@ public class Landmasses {
 		group.addElement(container, DOMGroupManager.FILL);
 		
 		for(Landmass lm : landmasses) {
+			System.out.println("\t\tdrawing land");
 			StringBuilder path = new StringBuilder();
 			Iterator<LatLong> it = lm.getPoints().iterator();
 			Point start = Mercator.getPixel(it.next(), width);

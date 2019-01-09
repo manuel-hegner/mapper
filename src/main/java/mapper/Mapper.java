@@ -26,7 +26,7 @@ public class Mapper {
 	
 	public static void main(String... args) throws Exception {
 		new Mapper().create(500);
-		new Mapper().create(2000);
+		new Mapper().create(1000);
 		//new Mapper().create(10_000);
 	}
 	
@@ -54,11 +54,12 @@ public class Mapper {
 		g.drawImage(img, 0, 0, null);
 		
 		//draw landmasses
+		Landmasses lms = Jackson.MAPPER
+			.readValue(new File("coordinates.json"), Landmasses.class);
+		System.out.println("\tinterpolate landmasses");
+		lms.interpolate(width);
 		System.out.println("\tdraw landmasses");
-		Jackson.MAPPER
-			.readValue(new File("coordinates.json"), Landmasses.class)
-			.interpolate(width)
-			.render(g, width, height);
+		lms.render(g, width, height);
 		
 		//store svg
 		System.out.println("\tstore svg");

@@ -26,4 +26,15 @@ public class Point {
 	public double[] toArray() {
 		return new double[] {x, y};
 	}
+	
+	public static long generateRandomSeed(Point a, Point b) {
+		return Double.doubleToLongBits(a.y)
+			+ Double.doubleToLongBits(a.x)
+			+ Double.doubleToLongBits(b.y)
+			+ Double.doubleToLongBits(b.x);
+	}
+
+	public double distanceTo2(Point b) {
+		return (x-b.x)*(x-b.x)+(y-b.y)*(y-b.y);
+	}
 }

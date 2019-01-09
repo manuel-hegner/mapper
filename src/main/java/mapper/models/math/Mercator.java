@@ -10,6 +10,10 @@ public class Mercator {
 	public static LatLong fromPixels(RawPoint p, int mapSize) {
 		return fromPixels(p.getX(), p.getY(), mapSize);
 	}
+	
+	public static LatLong fromPixels(Point p, int mapSize) {
+		return fromPixels(p.getX(), p.getY(), mapSize);
+	}
 
 	public static LatLong fromPixels(double x, double y, int mapSize) {
 		return new LatLong(pixelYToLatitude(y, mapSize), pixelXToLongitude(x, mapSize));
