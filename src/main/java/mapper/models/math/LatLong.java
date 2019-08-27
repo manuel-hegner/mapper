@@ -1,6 +1,6 @@
 package mapper.models.math;
 
-import java.util.Random;
+import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -19,9 +19,24 @@ import lombok.ToString;
 public class LatLong {
 
 	private final static int R = 6371; // Radius of the earth
+	private LineMode lineMode = LineMode.F;
 	private double latitude;
 	private double longitude;
 
+	
+	@JsonCreator
+	public LatLong(Object[] coordinates) {
+		if (coordinates.length == 3) {
+			lineMode = LineMode.valueOf((String)coordinates[0]);
+			latitude = (Double)coordinates[1];
+			longitude = (Double)coordinates[2];
+		}
+		else {
+			latitude = (Double)coordinates[0];
+			longitude = (Double)coordinates[1];
+		}
+	}
+	
 	@JsonCreator
 	public LatLong(double[] coordinates) {
 		if (coordinates.length != 2)
@@ -31,8 +46,8 @@ public class LatLong {
 	}
 
 	@JsonValue
-	public double[] toArray() {
-		return new double[] { latitude, longitude };
+	public Object[] toArray() {
+		return new Object[] { lineMode.name(), latitude, longitude };
 	}
 
 	public double distanceTo(LatLong p2) {

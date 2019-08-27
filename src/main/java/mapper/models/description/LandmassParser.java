@@ -7,6 +7,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import mapper.models.description.Landmass.Type;
+import mapper.models.math.LineMode;
 import mapper.models.math.Mercator;
 
 public class LandmassParser {
@@ -74,7 +75,7 @@ public class LandmassParser {
 								}
 							}
 							
-							l.getPoints().add(Mercator.fromPixels(Math.min(x,width), y, width));
+							l.getPoints().add(Mercator.fromPixels(LineMode.F, Math.min(x,width), y, width));
 						}
 					}
 				}

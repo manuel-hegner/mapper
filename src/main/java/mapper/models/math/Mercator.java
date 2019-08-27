@@ -7,16 +7,16 @@ public class Mercator {
 	public static final double LATITUDE_MAX = 85.05112877980659;
 	public static final double LATITUDE_MIN = -LATITUDE_MAX;
 	
-	public static LatLong fromPixels(RawPoint p, int mapSize) {
-		return fromPixels(p.getX(), p.getY(), mapSize);
+	public static LatLong fromPixels(LineMode mode, RawPoint p, int mapSize) {
+		return fromPixels(mode, p.getX(), p.getY(), mapSize);
 	}
 	
 	public static LatLong fromPixels(Point p, int mapSize) {
-		return fromPixels(p.getX(), p.getY(), mapSize);
+		return fromPixels(p.getLineMode(), p.getX(), p.getY(), mapSize);
 	}
 
-	public static LatLong fromPixels(double x, double y, int mapSize) {
-		return new LatLong(pixelYToLatitude(y, mapSize), pixelXToLongitude(x, mapSize));
+	public static LatLong fromPixels(LineMode mode, double x, double y, int mapSize) {
+		return new LatLong(mode, pixelYToLatitude(y, mapSize), pixelXToLongitude(x, mapSize));
 	}
 
 	public static double pixelXToLongitude(double x, int mapSize) {
@@ -37,7 +37,7 @@ public class Mercator {
 	public static Point getPixel(LatLong latLong, int mapSize) {
 		double pixelX = longitudeToPixelX(latLong.getLongitude(), mapSize);
 		double pixelY = latitudeToPixelY(latLong.getLatitude(), mapSize);
-		return new Point(pixelX, pixelY);
+		return new Point(latLong.getLineMode(), pixelX, pixelY);
 	}
 
 	public static double longitudeToPixelX(double longitude, long mapSize) {

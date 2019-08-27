@@ -27,16 +27,16 @@ public class FractalLines {
 		
 		while(!open.isEmpty()) {
 			Point b = open.getFirst();
-			
-			double distance = a.distanceTo2(b);
-			if(distance > maxDistance) {
-				Point c = fractal(type, r, a, b, width);
-				open.push(c);
+			if(b.getLineMode() == LineMode.F) {
+				double distance = a.distanceTo2(b);
+				if(distance > maxDistance) {
+					Point c = fractal(type, r, a, b, width);
+					open.push(c);
+					continue;
+				}
 			}
-			else {
-				a = b;
-				result.add(open.pop());
-			}
+			a = b;
+			result.add(open.pop());
 		}
 		//if closed remove the last point again
 		if(closed)
@@ -44,6 +44,7 @@ public class FractalLines {
 		return result
 			.stream()
 			.map(p->new LatLong(
+				p.getLineMode(),
 				Mercator.pixelYToLatitude(Cap.cap(p.getY(), width), width), 
 				Mercator.pixelXToLongitude(Cap.cap(p.getX(), width), width)
 			))
@@ -66,6 +67,7 @@ public class FractalLines {
 		double noiseY = type.getFractalStrength()*0.1*(r.nextDouble()-0.5);
 		
 		return new Point( 
+			b.getLineMode(),
 			ma*aX+mb*bX + (aY-bY)*d,// + noiseX,
 			ma*aY+mb*bY - (aX-bX)*d// + noiseY
 		);

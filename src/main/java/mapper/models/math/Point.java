@@ -11,8 +11,19 @@ import lombok.ToString;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @ToString
 public class Point {
+	private LineMode lineMode = LineMode.F;
 	private double x;
 	private double y;
+	
+	
+	@JsonCreator
+	public Point(Object[] coordinates) {
+		if (coordinates.length != 3)
+			throw new IllegalArgumentException();
+		lineMode = LineMode.valueOf((String)coordinates[0]);
+		x = (Double)coordinates[1];
+		y = (Double)coordinates[2];
+	}
 	
 	@JsonCreator
 	public Point(double[] coordinates) {
@@ -23,8 +34,8 @@ public class Point {
 	}
 	
 	@JsonValue
-	public double[] toArray() {
-		return new double[] {x, y};
+	public Object[] toArray() {
+		return new Object[] {lineMode, x, y};
 	}
 	
 	public static long generateRandomSeed(Point a, Point b) {
